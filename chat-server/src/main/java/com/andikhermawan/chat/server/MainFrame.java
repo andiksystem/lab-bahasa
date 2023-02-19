@@ -1,13 +1,6 @@
 package com.andikhermawan.chat.server;
 
 import com.andikhermawan.chat.commons.Utils;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -143,32 +136,8 @@ public class MainFrame extends javax.swing.JFrame {
             }
         }.start();
 
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    ServerSocket serverSocket = new ServerSocket(Integer.parseInt(portCommand.getText()));
-                    while (true) {
-                        Socket socket = serverSocket.accept();
-                        InputStream inputStream = socket.getInputStream();
-                        OutputStream outputStream = socket.getOutputStream();
-                        DataInputStream dis = new DataInputStream(inputStream);
-                        DataOutputStream dos = new DataOutputStream(outputStream);
-                        String message = dis.readUTF();
-                        Log.add("command message " + message);
-                        dos.writeUTF("do " + message);
-                        dos.flush();
-                        dos.close();
-                        outputStream.close();
-                        dis.close();
-                        inputStream.close();
-                    }
-                } catch (IOException | NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(rootPane, ex, getTitle(), JOptionPane.ERROR_MESSAGE);
-                    System.exit(0);
-                }
-            }
-        }.start();
+        CommandServer cs = new CommandServer(Integer.parseInt(portCommand.getText()));
+        cs.start();
 
         new Thread() { //start logger
             @Override

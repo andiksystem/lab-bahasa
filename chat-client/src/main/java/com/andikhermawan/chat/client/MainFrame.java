@@ -2,11 +2,9 @@ package com.andikhermawan.chat.client;
 
 import com.andikhermawan.chat.commons.SoundPacket;
 import com.andikhermawan.chat.commons.Utils;
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -76,6 +74,30 @@ public class MainFrame extends javax.swing.JFrame {
         micTester = new MicTester();
         micTester.start();
     }
+    
+    public void sendCommand(String command) {
+        try {
+            // TODO add your handling code here:
+            Socket socket = new Socket(ip.getText(), Integer.parseInt(portCommand.getText()));
+            OutputStream outputStream = socket.getOutputStream();
+            DataOutputStream dos = new DataOutputStream(outputStream);
+            dos.writeUTF(command);
+            dos.flush();
+            
+            DataInputStream dis = new DataInputStream(socket.getInputStream());
+            String readUTF = dis.readUTF();
+            System.out.println("receive from server " + readUTF);
+                        
+            dos.close();
+            outputStream.close();
+            
+            dis.close();
+            
+            socket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -90,7 +112,7 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         micVol = new javax.swing.JSlider();
-        jButton1 = new javax.swing.JButton();
+        cobaButton = new javax.swing.JButton();
         portCommand = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
 
@@ -125,16 +147,16 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Coba");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        cobaButton.setText("Coba");
+        cobaButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                cobaButtonActionPerformed(evt);
             }
         });
 
         portCommand.setText("7891");
 
-        jLabel5.setText("Mic level");
+        jLabel5.setText("Port Command");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -162,9 +184,9 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(portCommand, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(portCommand, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)
+                        .addComponent(cobaButton)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -190,7 +212,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(cobaButton)
                     .addComponent(portCommand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -225,29 +247,9 @@ public class MainFrame extends javax.swing.JFrame {
         MicThread.amplification = ((double) (micVol.getValue())) / 100.0;
     }//GEN-LAST:event_micVolStateChanged
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            // TODO add your handling code here:
-            Socket socket = new Socket(ip.getText(), Integer.parseInt(portCommand.getText()));
-            OutputStream outputStream = socket.getOutputStream();
-            DataOutputStream dos = new DataOutputStream(outputStream);
-            dos.writeUTF("hello jon");
-            dos.flush();
-            
-            DataInputStream dis = new DataInputStream(socket.getInputStream());
-            String readUTF = dis.readUTF();
-            System.out.println("receive from server " + readUTF);
-                        
-            dos.close();
-            outputStream.close();
-            
-            dis.close();
-            
-            socket.close();
-        } catch (IOException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void cobaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cobaButtonActionPerformed
+        sendCommand("coba -u pablo -p xyz");
+    }//GEN-LAST:event_cobaButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -264,8 +266,8 @@ public class MainFrame extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton cobaButton;
     private javax.swing.JTextField ip;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

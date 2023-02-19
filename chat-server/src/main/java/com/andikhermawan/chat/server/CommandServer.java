@@ -43,14 +43,19 @@ public class CommandServer extends Thread {
         OutputStream outputStream = null;
 
         try {
-            socket = serverSocket.accept();
             while (started) {
+                socket = serverSocket.accept();
                 inputStream = socket.getInputStream();
                 outputStream = socket.getOutputStream();
 
                 dataInputStream = new DataInputStream(inputStream);
                 dataOutputStream = new DataOutputStream(outputStream);
 
+                String command = dataInputStream.readUTF();
+                System.out.println("execute command " + command);
+
+                dataOutputStream.writeUTF(command);
+                dataOutputStream.flush();
             }
         } catch (IOException ex) {
             Logger.getLogger(CommandServer.class.getName()).log(Level.SEVERE, null, ex);
