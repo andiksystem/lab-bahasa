@@ -1,10 +1,8 @@
 package com.andikhermawan.chat.server;
 
 import com.andikhermawan.chat.commons.Utils;
-import java.awt.Component;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -26,29 +24,6 @@ public class MainFrame extends javax.swing.JFrame {
         initComponents();
     }
 
-    public void addClient(String clientId) {
-        JButton button = new JButton();
-        button.setText(clientId);
-        button.setName(clientId);
-        clientPanel.add(button);
-        clientPanel.revalidate();
-        clientPanel.repaint();
-    }
-    
-    public void removeClient(String clientId) {
-        Component clientComponent = null;
-        for (Component component : clientPanel.getComponents()) {
-            if (component instanceof JButton && clientId.equals(component.getName())) {
-                clientComponent = component;
-                break;
-            }
-        }
-        
-        clientPanel.remove(clientComponent);
-        clientPanel.revalidate();
-        clientPanel.repaint();        
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -59,18 +34,10 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         containerPanel = new javax.swing.JPanel();
-        sidebarPanel = new javax.swing.JPanel();
-        koneksiPanel = new javax.swing.JPanel();
-        startButton = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        toolbarPanel = new javax.swing.JPanel();
         port = new javax.swing.JTextField();
-        commandPanel = new javax.swing.JPanel();
-        shareScreenButton = new javax.swing.JButton();
-        showHideLogButton = new javax.swing.JButton();
-        contentPanel = new javax.swing.JPanel();
-        mainPanel = new javax.swing.JPanel();
-        clientPanel = new javax.swing.JPanel();
-        sharePanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        startButton = new javax.swing.JButton();
         logPanel = new javax.swing.JPanel();
         logScrollPane = new javax.swing.JScrollPane();
         log = new javax.swing.JTextArea();
@@ -79,8 +46,9 @@ public class MainFrame extends javax.swing.JFrame {
 
         containerPanel.setLayout(new java.awt.BorderLayout());
 
-        sidebarPanel.setPreferredSize(new java.awt.Dimension(200, 419));
-        sidebarPanel.setLayout(new java.awt.BorderLayout());
+        port.setText("1049");
+
+        jLabel1.setText("Port");
 
         startButton.setText("Start");
         startButton.addActionListener(new java.awt.event.ActionListener() {
@@ -89,104 +57,49 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Port");
-
-        port.setText("1049");
-
-        javax.swing.GroupLayout koneksiPanelLayout = new javax.swing.GroupLayout(koneksiPanel);
-        koneksiPanel.setLayout(koneksiPanelLayout);
-        koneksiPanelLayout.setHorizontalGroup(
-            koneksiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(koneksiPanelLayout.createSequentialGroup()
+        javax.swing.GroupLayout toolbarPanelLayout = new javax.swing.GroupLayout(toolbarPanel);
+        toolbarPanel.setLayout(toolbarPanelLayout);
+        toolbarPanelLayout.setHorizontalGroup(
+            toolbarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(toolbarPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(port, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
+                .addComponent(port, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(startButton)
-                .addContainerGap())
+                .addContainerGap(467, Short.MAX_VALUE))
         );
-        koneksiPanelLayout.setVerticalGroup(
-            koneksiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(koneksiPanelLayout.createSequentialGroup()
+        toolbarPanelLayout.setVerticalGroup(
+            toolbarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(toolbarPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(koneksiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(toolbarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(port, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(startButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        sidebarPanel.add(koneksiPanel, java.awt.BorderLayout.PAGE_START);
+        containerPanel.add(toolbarPanel, java.awt.BorderLayout.PAGE_START);
 
-        shareScreenButton.setText("Share Screen");
-
-        showHideLogButton.setText("Show / Hide Log");
-
-        javax.swing.GroupLayout commandPanelLayout = new javax.swing.GroupLayout(commandPanel);
-        commandPanel.setLayout(commandPanelLayout);
-        commandPanelLayout.setHorizontalGroup(
-            commandPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(commandPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(commandPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(shareScreenButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(showHideLogButton, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        commandPanelLayout.setVerticalGroup(
-            commandPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, commandPanelLayout.createSequentialGroup()
-                .addContainerGap(329, Short.MAX_VALUE)
-                .addComponent(shareScreenButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(showHideLogButton)
-                .addContainerGap())
-        );
-
-        sidebarPanel.add(commandPanel, java.awt.BorderLayout.CENTER);
-
-        containerPanel.add(sidebarPanel, java.awt.BorderLayout.LINE_START);
-
-        contentPanel.setLayout(new java.awt.BorderLayout());
-
-        mainPanel.setLayout(new java.awt.BorderLayout());
-
-        clientPanel.setPreferredSize(new java.awt.Dimension(10, 80));
-        mainPanel.add(clientPanel, java.awt.BorderLayout.PAGE_START);
-
-        javax.swing.GroupLayout sharePanelLayout = new javax.swing.GroupLayout(sharePanel);
-        sharePanel.setLayout(sharePanelLayout);
-        sharePanelLayout.setHorizontalGroup(
-            sharePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        sharePanelLayout.setVerticalGroup(
-            sharePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 179, Short.MAX_VALUE)
-        );
-
-        mainPanel.add(sharePanel, java.awt.BorderLayout.CENTER);
-
-        logPanel.setMinimumSize(new java.awt.Dimension(100, 140));
-        logPanel.setPreferredSize(new java.awt.Dimension(456, 160));
         logPanel.setLayout(new java.awt.BorderLayout());
 
-        logScrollPane.setPreferredSize(new java.awt.Dimension(100, 82));
+        logScrollPane.setBorder(null);
+        logScrollPane.setPreferredSize(new java.awt.Dimension(400, 300));
 
         log.setEditable(false);
+        log.setBackground(new java.awt.Color(51, 51, 51));
         log.setColumns(20);
+        log.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        log.setForeground(new java.awt.Color(204, 204, 204));
         log.setRows(5);
-        log.setBorder(null);
+        log.setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 8, 8, 8));
         logScrollPane.setViewportView(log);
 
         logPanel.add(logScrollPane, java.awt.BorderLayout.CENTER);
 
-        mainPanel.add(logPanel, java.awt.BorderLayout.PAGE_END);
-
-        contentPanel.add(mainPanel, java.awt.BorderLayout.CENTER);
-
-        containerPanel.add(contentPanel, java.awt.BorderLayout.CENTER);
+        containerPanel.add(logPanel, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(containerPanel, java.awt.BorderLayout.CENTER);
 
@@ -242,21 +155,13 @@ public class MainFrame extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel clientPanel;
-    private javax.swing.JPanel commandPanel;
     private javax.swing.JPanel containerPanel;
-    private javax.swing.JPanel contentPanel;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel koneksiPanel;
     private javax.swing.JTextArea log;
     private javax.swing.JPanel logPanel;
     private javax.swing.JScrollPane logScrollPane;
-    private javax.swing.JPanel mainPanel;
     private javax.swing.JTextField port;
-    private javax.swing.JPanel sharePanel;
-    private javax.swing.JButton shareScreenButton;
-    private javax.swing.JButton showHideLogButton;
-    private javax.swing.JPanel sidebarPanel;
     private javax.swing.JButton startButton;
+    private javax.swing.JPanel toolbarPanel;
     // End of variables declaration//GEN-END:variables
 }

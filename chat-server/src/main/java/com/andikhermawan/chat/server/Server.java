@@ -61,7 +61,6 @@ public class Server {
     private void addToClients(ClientConnection clientConnection) {
         try {
             clients.add(clientConnection);
-            mainFrame.addClient(String.valueOf(clientConnection.getChatId()));
         } catch (Throwable t) {
             Utils.sleep(1);
             addToClients(clientConnection);
@@ -79,7 +78,6 @@ public class Server {
                         if (!clientConnection.isAlive()) {
                             Log.add("dead connection closed: " + clientConnection.getInetAddress() + ":" + clientConnection.getPort() + " on port " + port);
                             toRemove.add(clientConnection);
-                            mainFrame.removeClient(String.valueOf(clientConnection.getChatId()));
                         }
                     }
 
