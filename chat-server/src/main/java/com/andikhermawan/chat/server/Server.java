@@ -47,6 +47,7 @@ public class Server {
             }
         }
     }
+    
     private static final Logger LOG = Logger.getLogger(Server.class.getName());
 
     public void addToBroadcastQueue(Message message) {

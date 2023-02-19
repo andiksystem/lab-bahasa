@@ -70,5 +70,5 @@ public class Client extends Thread {
         } catch (IOException | ClassNotFoundException e) { 
             System.out.println("client err " + e.toString());
         }
-    }
+    }    
 }

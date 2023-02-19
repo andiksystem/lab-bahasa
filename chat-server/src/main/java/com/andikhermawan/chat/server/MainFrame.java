@@ -1,6 +1,13 @@
 package com.andikhermawan.chat.server;
 
 import com.andikhermawan.chat.commons.Utils;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -35,9 +42,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         containerPanel = new javax.swing.JPanel();
         toolbarPanel = new javax.swing.JPanel();
-        port = new javax.swing.JTextField();
+        portAudio = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         startButton = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        portCommand = new javax.swing.JTextField();
         logPanel = new javax.swing.JPanel();
         logScrollPane = new javax.swing.JScrollPane();
         log = new javax.swing.JTextArea();
@@ -46,9 +55,9 @@ public class MainFrame extends javax.swing.JFrame {
 
         containerPanel.setLayout(new java.awt.BorderLayout());
 
-        port.setText("1049");
+        portAudio.setText("7890");
 
-        jLabel1.setText("Port");
+        jLabel1.setText("Port Audio");
 
         startButton.setText("Start");
         startButton.addActionListener(new java.awt.event.ActionListener() {
@@ -56,6 +65,10 @@ public class MainFrame extends javax.swing.JFrame {
                 startButtonActionPerformed(evt);
             }
         });
+
+        jLabel2.setText("Port Command");
+
+        portCommand.setText("7891");
 
         javax.swing.GroupLayout toolbarPanelLayout = new javax.swing.GroupLayout(toolbarPanel);
         toolbarPanel.setLayout(toolbarPanelLayout);
@@ -65,10 +78,14 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(port, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(portAudio, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(portCommand, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 207, Short.MAX_VALUE)
                 .addComponent(startButton)
-                .addContainerGap(467, Short.MAX_VALUE))
+                .addContainerGap())
         );
         toolbarPanelLayout.setVerticalGroup(
             toolbarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -76,9 +93,12 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(toolbarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(port, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(startButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(portAudio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(startButton)
+                    .addGroup(toolbarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(portCommand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         containerPanel.add(toolbarPanel, java.awt.BorderLayout.PAGE_START);
@@ -115,8 +135,35 @@ public class MainFrame extends javax.swing.JFrame {
             @Override
             public void run() {
                 try {
-                    Server server = new Server(MainFrame.this, Integer.parseInt(port.getText()));
+                    Server server = new Server(MainFrame.this, Integer.parseInt(portAudio.getText()));
                 } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(rootPane, ex, getTitle(), JOptionPane.ERROR_MESSAGE);
+                    System.exit(0);
+                }
+            }
+        }.start();
+
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    ServerSocket serverSocket = new ServerSocket(Integer.parseInt(portCommand.getText()));
+                    while (true) {
+                        Socket socket = serverSocket.accept();
+                        InputStream inputStream = socket.getInputStream();
+                        OutputStream outputStream = socket.getOutputStream();
+                        DataInputStream dis = new DataInputStream(inputStream);
+                        DataOutputStream dos = new DataOutputStream(outputStream);
+                        String message = dis.readUTF();
+                        Log.add("command message " + message);
+                        dos.writeUTF("do " + message);
+                        dos.flush();
+                        dos.close();
+                        outputStream.close();
+                        dis.close();
+                        inputStream.close();
+                    }
+                } catch (IOException | NumberFormatException ex) {
                     JOptionPane.showMessageDialog(rootPane, ex, getTitle(), JOptionPane.ERROR_MESSAGE);
                     System.exit(0);
                 }
@@ -136,7 +183,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         }.start();
 
-        port.setEnabled(false);
+        portAudio.setEnabled(false);
         startButton.setText("Stop");
     }//GEN-LAST:event_startButtonActionPerformed
 
@@ -157,10 +204,12 @@ public class MainFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel containerPanel;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JTextArea log;
     private javax.swing.JPanel logPanel;
     private javax.swing.JScrollPane logScrollPane;
-    private javax.swing.JTextField port;
+    private javax.swing.JTextField portAudio;
+    private javax.swing.JTextField portCommand;
     private javax.swing.JButton startButton;
     private javax.swing.JPanel toolbarPanel;
     // End of variables declaration//GEN-END:variables
